@@ -82,9 +82,17 @@ Vue.component('note-card',{
     computed: {
         isTodoLocked() {
             return this.columns.progress.length >= 5
+        },
+        progress(){
+            const done = this.card.items.filter(i => i.done).length
         }
     },
     methods: {
+        toggle(item){
+            if (this.locked || this.done) return
+            item.done = !item.done
+            this.$emit('update')
+        },
         seed(){
             this.columns.todo = [{
                 id: 1,
