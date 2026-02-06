@@ -9,6 +9,14 @@
 <div id="app" class="board">
     <div class="column">
         <h2>To Do</h2>
+        <div class="card">
+            <h3>{{ card.title }}</h3>
+        </div>
+        <ul>
+            <li v-for="item in card.items">
+            <input type="checkbox" v-model="item.done">
+            {{ item.text}}</li>
+        </ul>
     </div>
 
     <div class="column">
