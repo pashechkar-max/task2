@@ -76,8 +76,28 @@ Vue.component('note-card',{
         }
     },
     getProgress(card) {
-        const done =card.items.filter(i => i.done)
+        const done =card.items.filter(i => i.done).length;
+        return done / card.items.length
+    },
+    computed: {
+        isTodoLocked() {
+            return this.columns.progress.length >= 5
+        }
+    },
+    methods: {
+        seed(){
+            this.columns.todo = [{
+                id: 1,
+                title: 'Первая карточка',
+                items: [
+                    { text: 'Пункт 1', done: false },
+                    { text: 'Пункт 2', done: false },
+                    { text: 'Пункт 3', done: false }
+                ]
+            }]
+        }
     }
+
 })
 
 new Vue({
