@@ -74,6 +74,9 @@ Vue.component('note-card',{
             progress: [],
             done: []
         }
+    },
+    getProgress(card) {
+        const done =card.items.filter(i => i.done)
     }
 })
 
