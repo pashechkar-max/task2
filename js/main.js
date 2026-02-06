@@ -75,10 +75,6 @@ Vue.component('note-card',{
             done: []
         }
     },
-    getProgress(card) {
-        const done =card.items.filter(i => i.done).length;
-        return done / card.items.length
-    },
     computed: {
         isTodoLocked() {
             return this.columns.progress.length >= 5
@@ -104,6 +100,13 @@ Vue.component('note-card',{
                     { text: 'Пункт 3', done: false }
                 ]
             }]
+        },
+        getProgress(card) {
+            const done =card.items.filter(i => i.done).length;
+            return done / card.items.length
+        },
+        save(){
+            localStorage.setItem('notes', JSON.stringify(this.columns))
         }
     },
     template: `
