@@ -85,6 +85,7 @@ Vue.component('note-card',{
         },
         progress(){
             const done = this.card.items.filter(i => i.done).length
+            return done / this.card.items.length
         }
     },
     methods: {
@@ -104,7 +105,28 @@ Vue.component('note-card',{
                 ]
             }]
         }
-    }
+    },
+    template: `
+    <div class="card">
+        <h3>{{ card.title }}</h3>
+
+        <ul>
+            <li v-for="item in card.items">
+                <label>
+                    <input type="checkbox"
+                        :disabled="locked || done"
+                        v-model="item.done"
+                        @change="toggle(item)">
+                    {{ item.text }}
+                </label>
+            </li>
+        </ul>
+
+        <small v-if="card.finishedAt">
+            Завершено: {{ card.finishedAt }}
+        </small>
+    </div>
+    `
 
 })
 
