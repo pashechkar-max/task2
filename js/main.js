@@ -1,9 +1,34 @@
 let app = new Vue ({
     el: '#app',
-    data: {
+
+})
+Vue.component('card', {
+    props: {
+        truesh: {
+            type: Boolean,
+            required: true
+        }
+    },
+    template: `
+<div class="card">
+    <h1>{{ title }}</h1>
+    <div class="card-image">
+        <img :src="image" :alt="altText"/>
+    </div>
+    <div class="card-content">
+        <p>Description: {{ allText }}</p>
+        <ul>
+            <li v-for="categori in categories">{{ categori }}</li>
+        </ul>
+    </div>
+</div>
+    `,
+    data(){
+    return{
         product: "card",
         allText: "softysofty",
         categories: ['qwe', 'asd', 'zxc'],
+        selectedVariant: 0,
         variants: [
             {
                 variantId: 1,
@@ -23,5 +48,15 @@ let app = new Vue ({
             },
 
         ]
+    }
+},
+    computed:{
+        title(){
+            return this.product;
+        },
+        image(){
+            return this.variants[this.selectedVariant].variantImage;
+        },
+
     }
 })
