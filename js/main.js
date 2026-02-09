@@ -43,8 +43,18 @@ new Vue({
             todo: [],
             progress: [],
             done: []
+        },
+
+        newCard: {
+            title: '',
+            items: [
+                { text: '', done: false },
+                { text: '', done: false },
+                { text: '', done: false }
+            ]
         }
     },
+
 
     computed: {
         todoLocked() {

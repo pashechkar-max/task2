@@ -8,6 +8,34 @@
 <body>
 <div id="app" class="board">
 
+    <div class="create-card">
+        <input
+                v-model="newCard.title"
+                placeholder="Заголовок карточки"
+        >
+
+        <div v-for="(item, i) in newCard.items" :key="i">
+            <input
+                    v-model="item.text"
+                    placeholder="Пункт списка"
+            >
+        </div>
+
+        <button
+                @click="addItem"
+                :disabled="newCard.items.length >= 5"
+        >
+            + Пункт
+        </button>
+
+        <button
+                @click="createCard"
+                :disabled="!canCreateCard"
+        >
+            Создать карточку
+        </button>
+    </div>
+
     <div class="column">
         <h2>To Do</h2>
         <note-card
