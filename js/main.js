@@ -6,23 +6,22 @@ Vue.component('note-card',{
         done: Boolean,
     },
     methods:{
-        toggle(item){
+        toggle(){
             if (this.locked || this.done) return
-            item.done = !item.done
             this.$emit('update')
         },
         resetItems() {
             if (this.locked || this.done) return
             this.card.items.forEach(item => item.done = false)
+            this.card.finishedAt = null
             this.$emit('update')
-        },
+        }
     },
     template: `
     <div class="card">
         <h3>{{ card.title }}</h3>
-
         <ul>
-        <li v-for="item in card.items" :key="item.text">
+            <li v-for="(item, index) in card.items" :key="index">
                 <label>
                     <input type="checkbox"
                         :disabled="locked || done"
@@ -32,6 +31,7 @@ Vue.component('note-card',{
                 </label>
             </li>
         </ul>
+
         <button
             v-if="!done"
             @click="resetItems">

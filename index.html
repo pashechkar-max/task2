@@ -14,6 +14,7 @@
                 :key="card.id"
                 :card="card"
                 :locked="isTodoLocked"
+                :done="false"
                 @update="updateCard">
         </note-card>
     </div>
@@ -24,6 +25,7 @@
                 v-for="card in columns.progress"
                 :key="card.id"
                 :card="card"
+                :done="false"
                 @update="updateCard">
         </note-card>
     </div>
