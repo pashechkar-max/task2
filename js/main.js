@@ -17,7 +17,7 @@ Vue.component('note-card',{
         <h3>{{ card.title }}</h3>
 
         <ul>
-            <li v-for="item in card.items">
+        <li v-for="item in card.items" :key="item.text">
                 <label>
                     <input type="checkbox"
                         :disabled="locked || done"
@@ -86,10 +86,6 @@ new Vue({
                 return true
             })
         },
-        progress(){
-            const done = this.card.items.filter(i => i.done).length
-            return done / this.card.items.length
-        },
         getProgress(card) {
             const done =card.items.filter(i => i.done).length;
             return done / card.items.length
@@ -101,9 +97,6 @@ new Vue({
             const data = localStorage.getItem('notes');
             if(data){
                 this.columns =JSON.parse(data);
-            }
-            else{
-                this.seed()
             }
         }
     },

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Cards</title>
@@ -9,22 +9,33 @@
 <div id="app" class="board">
     <div class="column">
         <h2>To Do</h2>
-        <div class="card">
-            <h3>{{ card.title }}</h3>
-        </div>
-        <ul>
-            <li v-for="item in card.items">
-            <input type="checkbox" v-model="item.done">
-            {{ item.text}}</li>
-        </ul>
+        <note-card
+                v-for="card in columns.todo"
+                :key="card.id"
+                :card="card"
+                :locked="isTodoLocked"
+                @update="updateCard"
+        />
     </div>
 
     <div class="column">
         <h2>In Progress</h2>
+        <note-card
+                v-for="card in columns.progress"
+                :key="card.id"
+                :card="card"
+                @update="updateCard"
+        />
     </div>
 
     <div class="column">
         <h2>Done</h2>
+        <note-card
+                v-for="card in columns.done"
+                :key="card.id"
+                :card="card"
+                done
+        />
     </div>
 </div>
 
