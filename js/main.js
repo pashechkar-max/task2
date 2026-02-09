@@ -61,14 +61,14 @@ new Vue({
     },
     methods: {
         updateCard(){
-            this.moveCards;
-            this.save;
+            this.moveCards();
+            this.save();
         },
         moveCards(){
             this.columns.todo = this.columns.todo.filter(card => {
-                const progress = this.getProgress()
+                const progress = this.getProgress(card)
                 if (progress > 0.5){
-                    if(this.columns.progress.length > 5){
+                    if(this.columns.progress.length < 5){
                         this.columns.progress.push(card)
                         return false
                     }
@@ -108,7 +108,7 @@ new Vue({
         }
     },
 
-    mountend(){
+    mounted(){
         this.load();
     }
 })
