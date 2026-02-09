@@ -1,118 +1,123 @@
-
-Vue.component('note-card',{
+Vue.component('note-card', {
     props: {
         card: Object,
-        locked: Boolean,
-        done: Boolean,
+        disabled: Boolean
     },
-    methods:{
-        toggle(){
-            if (this.locked || this.done) return
-            this.$emit('update')
-        },
-        resetItems() {
-            if (this.locked || this.done) return
-            this.card.items.forEach(item => item.done = false)
-            this.card.finishedAt = null
-            this.$emit('update')
+    methods: {
+        onChange() {
+            if (!this.disabled) {
+                this.$emit('update')
+            }
         }
     },
     template: `
     <div class="card">
-        <h3>{{ card.title }}</h3>
-        <ul>
-            <li v-for="(item, index) in card.items" :key="index">
-                <label>
-                    <input type="checkbox"
-                        :disabled="locked || done"
-                        v-model="item.done"
-                        @change="toggle(item)">
-                    {{ item.text }}
-                </label>
-            </li>
-        </ul>
+      <h3>{{ card.title }}</h3>
 
-        <button
-            v-if="!done"
-            @click="resetItems">
-            Сбросить пункты
-        </button>
-        <small v-if="card.finishedAt">
-            Завершено: {{ card.finishedAt }}
-        </small>
+      <ul>
+        <li v-for="(item, i) in card.items" :key="i">
+          <label>
+            <input
+              type="checkbox"
+              v-model="item.done"
+              :disabled="disabled"
+              @change="onChange"
+            >
+            {{ item.text }}
+          </label>
+        </li>
+      </ul>
+
+      <small v-if="card.finishedAt">
+        Завершено: {{ card.finishedAt }}
+      </small>
     </div>
-    `
+  `
 })
 
 new Vue({
     el: '#app',
+
     data: {
         columns: {
-            todo: [{
-                id: 1,
-                title: 'Первая карточка',
-                items: [
-                { text: 'Пункт 1', done: false },
-                { text: 'Пункт 2', done: false },
-                { text: 'Пункт 3', done: false },
-                { text: 'Пункт 3', done: false },
-                { text: 'Пункт 3', done: false },
-                ],
-                finishedAt: null
-            }],
+            todo: [],
             progress: [],
             done: []
         }
     },
+
     computed: {
-        isTodoLocked() {
+        todoLocked() {
             return this.columns.progress.length >= 5
+        }
+    },
+
+    methods: {
+        update() {
+            this.moveCards()
+            this.save()
         },
 
-    },
-    methods: {
-        updateCard(){
-            this.moveCards();
-            this.save();
-        },
-        moveCards(){
+        moveCards() {
             this.columns.todo = this.columns.todo.filter(card => {
-                const progress = this.getProgress(card)
-                if (progress > 0.5){
-                    if(this.columns.progress.length < 5){
-                        this.columns.progress.push(card)
-                        return false
-                    }
+                const p = this.progress(card)
+
+                if (p === 1) {
+                    this.finish(card)
+                    this.columns.done.push(card)
+                    return false
                 }
+
+                if (p > 0.5 && this.columns.progress.length < 5) {
+                    this.columns.progress.push(card)
+                    return false
+                }
+
                 return true
             })
 
             this.columns.progress = this.columns.progress.filter(card => {
-                const progress = this.getProgress(card)
-                if (progress === 1){
-                    card.finishedAt = new Date().toLocaleDateString()
+                if (this.progress(card) === 1) {
+                    this.finish(card)
                     this.columns.done.push(card)
                     return false
                 }
                 return true
             })
         },
-        getProgress(card) {
-            const done =card.items.filter(i => i.done).length;
-            return done / card.items.length
+
+        progress(card) {
+            return card.items.filter(i => i.done).length / card.items.length
         },
-        save(){
+
+        finish(card) {
+            card.finishedAt = new Date().toLocaleString()
+        },
+
+        save() {
             localStorage.setItem('notes', JSON.stringify(this.columns))
         },
-        load(){
-            const data = localStorage.getItem('notes');
-            if(data){
-                this.columns =JSON.parse(data);
-            }
+
+        load() {
+            const data = localStorage.getItem('notes')
+            if (data) this.columns = JSON.parse(data)
         }
     },
 
-    mounted(){
-        this.load();
+    mounted() {
+        this.load()
+
+        if (!this.columns.todo.length) {
+            this.columns.todo.push({
+                id: 1,
+                title: 'Первая карточка',
+                items: [
+                    { text: 'Пункт 1', done: false },
+                    { text: 'Пункт 2', done: false },
+                    { text: 'Пункт 3', done: false }
+                ],
+                finishedAt: null
+            })
+        }
     }
 })
