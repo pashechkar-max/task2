@@ -82,14 +82,12 @@ new Vue({
                 finishedAt: null
             })
 
-            // сброс формы
             this.newCard.title = ''
             this.newCard.items = [
                 { text: '', done: false },
                 { text: '', done: false },
                 { text: '', done: false }
             ]
-
             this.save()
         },
 
@@ -105,25 +103,20 @@ new Vue({
         },
 
         moveCards() {
-            // TO DO → PROGRESS / DONE
             this.columns.todo = this.columns.todo.filter(card => {
                 const p = this.progress(card)
-
                 if (p === 1) {
                     this.finish(card)
                     this.columns.done.push(card)
                     return false
                 }
-
                 if (p > 0.5 && this.columns.progress.length < 5) {
                     this.columns.progress.push(card)
                     return false
                 }
-
                 return true
             })
 
-            // PROGRESS → DONE
             this.columns.progress = this.columns.progress.filter(card => {
                 if (this.progress(card) === 1) {
                     this.finish(card)
