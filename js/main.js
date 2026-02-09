@@ -5,9 +5,50 @@ Vue.component('note-card',{
         locked: Boolean,
         done: Boolean,
     },
+    methods:{
+        toggle(item){
+            if (this.locked || this.done) return
+            item.done = !item.done
+            this.$emit('update')
+        },
+    },
+    template: `
+    <div class="card">
+        <h3>{{ card.title }}</h3>
+
+        <ul>
+            <li v-for="item in card.items">
+                <label>
+                    <input type="checkbox"
+                        :disabled="locked || done"
+                        v-model="item.done"
+                        @change="toggle(item)">
+                    {{ item.text }}
+                </label>
+            </li>
+        </ul>
+
+        <small v-if="card.finishedAt">
+            Завершено: {{ card.finishedAt }}
+        </small>
+    </div>
+    `
+})
+
+new Vue({
+    el: '#app',
     data: {
         columns: {
-            todo: [],
+            todo: [{
+                id: 1,
+                title: 'Первая карточка',
+                items: [
+                { text: 'Пункт 1', done: false },
+                { text: 'Пункт 2', done: false },
+                { text: 'Пункт 3', done: false }
+                ],
+                finishedAt: null
+            }],
             progress: [],
             done: []
         }
@@ -45,22 +86,6 @@ Vue.component('note-card',{
                 return true
             })
         },
-        toggle(item){
-            if (this.locked || this.done) return
-            item.done = !item.done
-            this.$emit('update')
-        },
-        seed(){
-            this.columns.todo = [{
-                id: 1,
-                title: 'Первая карточка',
-                items: [
-                    { text: 'Пункт 1', done: false },
-                    { text: 'Пункт 2', done: false },
-                    { text: 'Пункт 3', done: false }
-                ]
-            }]
-        },
         progress(){
             const done = this.card.items.filter(i => i.done).length
             return done / this.card.items.length
@@ -80,35 +105,10 @@ Vue.component('note-card',{
             else{
                 this.seed()
             }
-        },
+        }
     },
-    template: `
-    <div class="card">
-        <h3>{{ card.title }}</h3>
 
-        <ul>
-            <li v-for="item in card.items">
-                <label>
-                    <input type="checkbox"
-                        :disabled="locked || done"
-                        v-model="item.done"
-                        @change="toggle(item)">
-                    {{ item.text }}
-                </label>
-            </li>
-        </ul>
-
-        <small v-if="card.finishedAt">
-            Завершено: {{ card.finishedAt }}
-        </small>
-    </div>
-    `,
     mountend(){
-        this.load;
+        this.load();
     }
-
-})
-
-new Vue({
-    el: '#app',
 })
