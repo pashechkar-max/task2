@@ -11,6 +11,11 @@ Vue.component('note-card',{
             item.done = !item.done
             this.$emit('update')
         },
+        resetItems() {
+            if (this.locked || this.done) return
+            this.card.items.forEach(item => item.done = false)
+            this.$emit('update')
+        },
     },
     template: `
     <div class="card">
@@ -27,7 +32,11 @@ Vue.component('note-card',{
                 </label>
             </li>
         </ul>
-
+        <button
+            v-if="!done"
+            @click="resetItems">
+            Сбросить пункты
+        </button>
         <small v-if="card.finishedAt">
             Завершено: {{ card.finishedAt }}
         </small>
@@ -45,7 +54,9 @@ new Vue({
                 items: [
                 { text: 'Пункт 1', done: false },
                 { text: 'Пункт 2', done: false },
-                { text: 'Пункт 3', done: false }
+                { text: 'Пункт 3', done: false },
+                { text: 'Пункт 3', done: false },
+                { text: 'Пункт 3', done: false },
                 ],
                 finishedAt: null
             }],

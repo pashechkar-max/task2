@@ -14,8 +14,8 @@
                 :key="card.id"
                 :card="card"
                 :locked="isTodoLocked"
-                @update="updateCard"
-        />
+                @update="updateCard">
+        </note-card>
     </div>
 
     <div class="column">
@@ -24,8 +24,8 @@
                 v-for="card in columns.progress"
                 :key="card.id"
                 :card="card"
-                @update="updateCard"
-        />
+                @update="updateCard">
+        </note-card>
     </div>
 
     <div class="column">
@@ -34,8 +34,8 @@
                 v-for="card in columns.done"
                 :key="card.id"
                 :card="card"
-                done
-        />
+                done>
+        </note-card>
     </div>
 </div>
 
