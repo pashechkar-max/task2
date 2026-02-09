@@ -1,66 +1,3 @@
-// let app = new Vue ({
-//     el: '#app',
-//
-// })
-// Vue.component('card', {
-//     props: {
-//         truesh: {
-//             type: Boolean,
-//             required: true
-//         }
-//     },
-//     template: `
-// <div class="card">
-//     <h1>{{ title }}</h1>
-//     <div class="card-image">
-//         <img :src="image" :alt="altText"/>
-//     </div>
-//     <div class="card-content">
-//         <p>Description: {{ allText }}</p>
-//         <ul>
-//             <li v-for="categori in categories">{{ categori }}</li>
-//         </ul>
-//     </div>
-// </div>
-//     `,
-//     data(){
-//     return{
-//         product: "card",
-//         allText: "softysofty",
-//         categories: ['qwe', 'asd', 'zxc'],
-//         selectedVariant: 0,
-//         variants: [
-//             {
-//                 variantId: 1,
-//                 variantImage: ".\assets\kusy1.jpg",
-//             },
-//             {
-//                 variantId: 2,
-//                 variantImage: ".\assets\kusy2.jpg",
-//             },
-//             {
-//                 variantId: 3,
-//                 variantImage: ".\assets\kusy3.jpg",
-//             },
-//             {
-//                 variantId: 4,
-//                 variantImage: ".\assets\kusy4.jpg",
-//             },
-//
-//         ]
-//     }
-// },
-//     computed:{
-//         title(){
-//             return this.product;
-//         },
-//         image(){
-//             return this.variants[this.selectedVariant].variantImage;
-//         },
-//
-//     }
-// })
-
 
 Vue.component('note-card',{
     props: {
@@ -79,12 +16,35 @@ Vue.component('note-card',{
         isTodoLocked() {
             return this.columns.progress.length >= 5
         },
-        progress(){
-            const done = this.card.items.filter(i => i.done).length
-            return done / this.card.items.length
-        }
+
     },
     methods: {
+        updateCard(){
+            this.moveCards;
+            this.save;
+        },
+        moveCards(){
+            this.columns.todo = this.columns.todo.filter(card => {
+                const progress = this.getProgress()
+                if (progress > 0.5){
+                    if(this.columns.progress.length > 5){
+                        this.columns.progress.push(card)
+                        return false
+                    }
+                }
+                return true
+            })
+
+            this.columns.progress = this.columns.progress.filter(card => {
+                const progress = this.getProgress(card)
+                if (progress === 1){
+                    card.finishedAt = new Date().toLocaleDateString()
+                    this.columns.done.push(card)
+                    return false
+                }
+                return true
+            })
+        },
         toggle(item){
             if (this.locked || this.done) return
             item.done = !item.done
@@ -101,13 +61,26 @@ Vue.component('note-card',{
                 ]
             }]
         },
+        progress(){
+            const done = this.card.items.filter(i => i.done).length
+            return done / this.card.items.length
+        },
         getProgress(card) {
             const done =card.items.filter(i => i.done).length;
             return done / card.items.length
         },
         save(){
             localStorage.setItem('notes', JSON.stringify(this.columns))
-        }
+        },
+        load(){
+            const data = localStorage.getItem('notes');
+            if(data){
+                this.columns =JSON.parse(data);
+            }
+            else{
+                this.seed()
+            }
+        },
     },
     template: `
     <div class="card">
@@ -129,7 +102,10 @@ Vue.component('note-card',{
             Завершено: {{ card.finishedAt }}
         </small>
     </div>
-    `
+    `,
+    mountend(){
+        this.load;
+    }
 
 })
 
