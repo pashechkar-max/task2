@@ -44,7 +44,6 @@ new Vue({
             progress: [],
             done: []
         },
-
         newCard: {
             title: '',
             items: [
@@ -55,20 +54,58 @@ new Vue({
         }
     },
 
-
     computed: {
         todoLocked() {
             return this.columns.progress.length >= 5
+        },
+
+        canCreateCard() {
+            if (this.columns.todo.length >= 3) return false
+            if (!this.newCard.title.trim()) return false
+
+            const filled = this.newCard.items.filter(i => i.text.trim())
+            return filled.length >= 3 && filled.length <= 5
         }
     },
 
     methods: {
+        createCard() {
+            if (!this.canCreateCard) return
+
+            this.columns.todo.push({
+                id: Date.now(),
+                title: this.newCard.title.trim(),
+                items: this.newCard.items.map(i => ({
+                    text: i.text.trim(),
+                    done: false
+                })),
+                finishedAt: null
+            })
+
+            // сброс формы
+            this.newCard.title = ''
+            this.newCard.items = [
+                { text: '', done: false },
+                { text: '', done: false },
+                { text: '', done: false }
+            ]
+
+            this.save()
+        },
+
+        addItem() {
+            if (this.newCard.items.length < 5) {
+                this.newCard.items.push({ text: '', done: false })
+            }
+        },
+
         update() {
             this.moveCards()
             this.save()
         },
 
         moveCards() {
+            // TO DO → PROGRESS / DONE
             this.columns.todo = this.columns.todo.filter(card => {
                 const p = this.progress(card)
 
@@ -86,6 +123,7 @@ new Vue({
                 return true
             })
 
+            // PROGRESS → DONE
             this.columns.progress = this.columns.progress.filter(card => {
                 if (this.progress(card) === 1) {
                     this.finish(card)
@@ -97,6 +135,7 @@ new Vue({
         },
 
         progress(card) {
+            if (!card.items.length) return 0
             return card.items.filter(i => i.done).length / card.items.length
         },
 
@@ -116,18 +155,5 @@ new Vue({
 
     mounted() {
         this.load()
-
-        if (!this.columns.todo.length) {
-            this.columns.todo.push({
-                id: 1,
-                title: 'Первая карточка',
-                items: [
-                    { text: 'Пункт 1', done: false },
-                    { text: 'Пункт 2', done: false },
-                    { text: 'Пункт 3', done: false }
-                ],
-                finishedAt: null
-            })
-        }
     }
 })
