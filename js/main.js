@@ -123,6 +123,41 @@ Vue.component('create-card', {
     `
 })
 
+Vue.component('board-column', {
+    props: {
+        title: String,
+        cards: Array,
+        disabled: Boolean,
+        priorityLocked: Boolean,
+        isDoneColumn: Boolean
+    },
+    methods: {
+        clear() {
+            this.$emit('clear')
+        }
+    },
+    template: `
+    <div class="column">
+        <h2>{{ title }}</h2>
+
+        <note-card
+            v-for="card in cards"
+            :key="card.id"
+            :card="card"
+            :disabled="disabled"
+            :priorityLocked="priorityLocked"
+            @update="$emit('update')"
+            @priority="$emit('priority', $event)"
+        ></note-card>
+
+        <button v-if="isDoneColumn" @click="clear" :disabled="!cards.length">
+            Clear Done
+        </button>
+    </div>
+    `
+})
+
+
 new Vue({
     el: '#app',
 

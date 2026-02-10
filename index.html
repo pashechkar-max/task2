@@ -20,44 +20,31 @@
         </div>
     </div>
 
-<div class="columns">
-    <div class="column">
-        <h2>To Do</h2>
-        <note-card
-                v-for="card in columns.todo"
-                :key="card.id"
-                :card="card"
-                :disabled="todoLocked"
-                :priorityLocked="hasActivePriority && !card.isPriority"
-                @update="update"
-                @priority="setPriority">
-        </note-card>
-    </div>
+<<div class="columns">
+    <board-column
+            title="To Do"
+            :cards="columns.todo"
+            :disabled="todoLocked"
+            :priorityLocked="hasActivePriority && !card.isPriority"
+            @update="update"
+            @priority="setPriority"
+    ></board-column>
 
-    <div class="column">
-        <h2>In Progress</h2>
-        <note-card
-                v-for="card in columns.progress"
-                :key="card.id"
-                :card="card"
-                :priorityLocked="hasActivePriority && !card.isPriority"
-                @update="update"
-                @priority="setPriority">
-        </note-card>
-    </div>
+    <board-column
+            title="In Progress"
+            :cards="columns.progress"
+            :priorityLocked="hasActivePriority && !card.isPriority"
+            @update="update"
+            @priority="setPriority"
+    ></board-column>
 
-    <div class="column">
-        <h2>Done</h2>
-        <note-card
-                v-for="card in columns.done"
-                :key="card.id"
-                :card="card"
-                :disabled="true">
-        </note-card>
-        <button class="clear" @click="clearDone" :disabled="!columns.done.length">
-            Clear Done
-        </button>
-    </div>
+    <board-column
+            title="Done"
+            :cards="columns.done"
+            :disabled="true"
+            :isDoneColumn="true"
+            @clear="clearDone"
+    ></board-column>
 </div>
 </div>
 
