@@ -7,8 +7,16 @@
 </head>
 <body>
 <div id="app" class="board">
-    <create-card @create="addCard"></create-card>
+    <div class="row-create">
+        <h1>Task 2</h1>
+        <div class="create-note">
+            <p>Сreate your notes</p>
+            <create-card @create="addCard"></create-card>
+        </div>
 
+    </div>
+
+<div class="columns">
     <div class="column">
         <h2>To Do</h2>
         <note-card
@@ -38,10 +46,11 @@
                 :card="card"
                 :disabled="true">
         </note-card>
-        <button @click="clearDone" :disabled="!columns.done.length">
+        <button class="clear" @click="clearDone" :disabled="!columns.done.length">
             Clear Done
         </button>
     </div>
+</div>
 </div>
 
 
