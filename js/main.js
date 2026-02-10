@@ -135,6 +135,7 @@ new Vue({
             card.finishedAt = new Date().toLocaleString()
         },
 
+
         save() {
             localStorage.setItem('notes', JSON.stringify(this.columns))
         },
