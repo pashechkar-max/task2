@@ -7,34 +7,7 @@
 </head>
 <body>
 <div id="app" class="board">
-    <div ></div>
-    <div class="create-card">
-        <input
-                v-model="newCard.title"
-                placeholder="Title"
-        >
-
-        <div v-for="(item, i) in newCard.items" :key="i">
-            <input
-                    v-model="item.text"
-                    placeholder="Item"
-            >
-        </div>
-
-        <button
-                @click="addItem"
-                :disabled="newCard.items.length >= 5"
-        >
-            + Item
-        </button>
-
-        <button
-                @click="createCard"
-                :disabled="!canCreateCard"
-        >
-            Сreate
-        </button>
-    </div>
+    <create-card @create="addCard"></create-card>
 
     <div class="column">
         <h2>To Do</h2>
@@ -65,15 +38,12 @@
                 :card="card"
                 :disabled="true">
         </note-card>
-        <button
-                @click="clearDone"
-                :disabled="!columns.done.length"
-        >
+        <button @click="clearDone" :disabled="!columns.done.length">
             Clear Done
         </button>
     </div>
-
 </div>
+
 
 <script defer src="js/vue.js"></script>
 <script defer src="js/main.js"></script>

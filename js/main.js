@@ -1,3 +1,40 @@
+Vue.component('note-card', {
+    props: {
+        card: Object,
+        disabled: Boolean
+    },
+    methods: {
+        onChange() {
+            if (!this.disabled) {
+                this.$emit('update')
+            }
+        }
+    },
+    template: `
+    <div class="card">
+      <h3>{{ card.title }}</h3>
+
+      <ul>
+        <li v-for="(item, i) in card.items" :key="i">
+          <label>
+            <input
+              type="checkbox"
+              v-model="item.done"
+              :disabled="disabled"
+              @change="onChange"
+            >
+            {{ item.text }}
+          </label>
+        </li>
+      </ul>
+
+      <small v-if="card.finishedAt">
+        Completed: {{ card.finishedAt }}
+      </small>
+    </div>
+  `
+})
+
 Vue.component('create-card', {
     data() {
         return {
@@ -70,45 +107,6 @@ Vue.component('create-card', {
         </button>
       </div>
     `
-})
-
-
-
-Vue.component('note-card', {
-    props: {
-        card: Object,
-        disabled: Boolean
-    },
-    methods: {
-        onChange() {
-            if (!this.disabled) {
-                this.$emit('update')
-            }
-        }
-    },
-    template: `
-    <div class="card">
-      <h3>{{ card.title }}</h3>
-
-      <ul>
-        <li v-for="(item, i) in card.items" :key="i">
-          <label>
-            <input
-              type="checkbox"
-              v-model="item.done"
-              :disabled="disabled"
-              @change="onChange"
-            >
-            {{ item.text }}
-          </label>
-        </li>
-      </ul>
-
-      <small v-if="card.finishedAt">
-        Completed: {{ card.finishedAt }}
-      </small>
-    </div>
-  `
 })
 
 new Vue({
