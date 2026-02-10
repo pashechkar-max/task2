@@ -26,7 +26,6 @@ Vue.component('note-card', {
     create priority
   </button>
       </h3>
-
       <ul>
         <li v-for="(item, i) in card.items" :key="i">
           <label>
@@ -156,10 +155,8 @@ Vue.component('board-column', {
     `
 })
 
-
 new Vue({
     el: '#app',
-
     data: {
         columns: {
             todo: [],
