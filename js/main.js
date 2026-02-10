@@ -29,7 +29,7 @@ Vue.component('note-card', {
       </ul>
 
       <small v-if="card.finishedAt">
-        Завершено: {{ card.finishedAt }}
+        Completed: {{ card.finishedAt }}
       </small>
     </div>
   `
@@ -37,7 +37,6 @@ Vue.component('note-card', {
 
 new Vue({
     el: '#app',
-
     data: {
         columns: {
             todo: [],
@@ -143,6 +142,12 @@ new Vue({
         load() {
             const data = localStorage.getItem('notes')
             if (data) this.columns = JSON.parse(data)
+        },
+        clearDone() {
+            if (!confirm('Clear all completed cards?')) return
+
+            this.columns.done = []
+            this.save()
         }
     },
 
