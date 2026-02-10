@@ -139,7 +139,6 @@ Vue.component('board-column', {
     template: `
     <div class="column">
         <h2>{{ title }}</h2>
-
         <note-card
             v-for="card in cards"
             :key="card.id"
