@@ -157,6 +157,9 @@ new Vue({
         },
 
         addCard(card) {
+            if (this.columns.todo.length >= 3) {
+                return alert("No more than three notes")
+            }
             this.columns.todo.push(card)
             this.save()
         },
