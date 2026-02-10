@@ -1,28 +1,41 @@
 Vue.component('note-card', {
     props: {
         card: Object,
-        disabled: Boolean
+        disabled: Boolean,
+        priorityLocked: Boolean
     },
     methods: {
         onChange() {
-            if (!this.disabled) {
+            if (!this.disabled && !this.priorityLocked) {
                 this.$emit('update')
             }
+        },
+        togglePriority() {
+            if (this.priorityLocked) return
+            this.$emit('priority', this.card)
         }
     },
     template: `
     <div class="card">
-      <h3>{{ card.title }}</h3>
+      <h3>{{ card.title }}
+            <button class="priority"
+            v-if="!card.finishedAt"
+            @click="togglePriority"
+            :disabled="priorityLocked"
+        >
+    create priority
+  </button>
+      </h3>
 
       <ul>
         <li v-for="(item, i) in card.items" :key="i">
           <label>
-            <input
+          <input
               type="checkbox"
               v-model="item.done"
-              :disabled="disabled"
+              :disabled="disabled || priorityLocked"
               @change="onChange"
-            >
+            />
             {{ item.text }}
           </label>
         </li>
@@ -73,7 +86,8 @@ Vue.component('create-card', {
                     text: i.text.trim(),
                     done: false
                 })),
-                finishedAt: null
+                finishedAt: null,
+                isPriority: false
             }
 
             this.$emit('create', card)
@@ -123,10 +137,25 @@ new Vue({
     computed: {
         todoLocked() {
             return this.columns.progress.length >= 5
+        },
+        hasActivePriority() {
+            const all = [
+                ...this.columns.todo,
+                ...this.columns.progress
+            ]
+            return all.some(card => card.isPriority)
         }
     },
 
     methods: {
+        setPriority(card) {
+            [...this.columns.todo, ...this.columns.progress].forEach(c => {
+                c.isPriority = false
+            })
+            card.isPriority = true
+            this.save()
+        },
+
         addCard(card) {
             this.columns.todo.push(card)
             this.save()
@@ -171,6 +200,7 @@ new Vue({
 
         finish(card) {
             card.finishedAt = new Date().toLocaleString()
+            card.isPriority = false
         },
 
         save() {

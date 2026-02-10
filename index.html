@@ -6,14 +6,18 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+
 <div id="app" class="board">
     <div class="row-create">
         <h1>Task 2</h1>
         <div class="create-note">
             <p>Сreate your notes</p>
-            <create-card @create="addCard"></create-card>
+            <create-card
+                    @create="addCard"
+                    v-if="!hasActivePriority"
+            >
+            </create-card>
         </div>
-
     </div>
 
 <div class="columns">
@@ -24,7 +28,9 @@
                 :key="card.id"
                 :card="card"
                 :disabled="todoLocked"
-                @update="update">
+                :priorityLocked="hasActivePriority && !card.isPriority"
+                @update="update"
+                @priority="setPriority">
         </note-card>
     </div>
 
@@ -34,7 +40,9 @@
                 v-for="card in columns.progress"
                 :key="card.id"
                 :card="card"
-                @update="update">
+                :priorityLocked="hasActivePriority && !card.isPriority"
+                @update="update"
+                @priority="setPriority">
         </note-card>
     </div>
 
