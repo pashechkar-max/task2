@@ -6,26 +6,32 @@
 .columns{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
+    margin: 0 10vw 0 10vw;
 }
 
+.column{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
 .row-create{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    margin-bottom: 80px;
+    justify-content: space-between;
+    margin: 0 10vw 0 10vw;
 }
 
 .create-note{
     display: flex;
     flex-direction: column;
+    width: 24vw;
 }
 
 .create-card{
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
 }
 
 .input{
@@ -34,12 +40,14 @@
     margin-bottom: 3px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    width: 100%;
 }
 
 .item{
     display: block;
-    padding: 8px 8px;
+    width: 24%;
     margin: 5px 0;
+    padding: 5px 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
     color: #8f8fff;
@@ -64,17 +72,31 @@
     background-color: #7e7efd;
 }
 
-.clear{
+#clear{
     display: block;
     width: 100%;
     height: 30px;
-    margin: 40px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: #f1f1f1;
+    background-color: #8f8fff;
+    font-weight: bold;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .priority{
     display: block;
-    padding: 4px 8px;
-    margin: 5px 0;
+    padding: 5px 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: #8f8fff;
+    background-color: #f1f1f1;
+    margin-top: 20px;
 }
 
 .priority:focus{
@@ -83,9 +105,13 @@
     font-weight: 600;
 }
 
-ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.card{
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px 16px 24px;
+    border: 1px solid #ccc;
+    width: 24vw;
+    border-radius: 5px;
+    overflow-wrap: break-word;
 }
 
