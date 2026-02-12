@@ -105,6 +105,7 @@ Vue.component('create-card', {
         }
     },
 
+
     template: `
       <div class="create-card">
         <input class="input" v-model="title" placeholder="title">
