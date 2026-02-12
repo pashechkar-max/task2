@@ -20,12 +20,12 @@
         </div>
     </div>
 
-<<div class="columns">
+<div class="columns">
     <board-column
             title="To Do"
             :cards="columns.todo"
             :disabled="todoLocked"
-            :priorityLocked="hasActivePriority && !card.isPriority"
+            :priorityLocked="hasActivePriority"
             @update="update"
             @priority="setPriority"
     ></board-column>
@@ -33,7 +33,7 @@
     <board-column
             title="In Progress"
             :cards="columns.progress"
-            :priorityLocked="hasActivePriority && !card.isPriority"
+            :priorityLocked="hasActivePriority"
             @update="update"
             @priority="setPriority"
     ></board-column>

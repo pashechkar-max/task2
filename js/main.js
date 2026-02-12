@@ -143,10 +143,9 @@ Vue.component('board-column', {
             :key="card.id"
             :card="card"
             :disabled="disabled"
-            :priorityLocked="priorityLocked"
-            @update="$emit('update')"
-            @priority="$emit('priority', $event)"
-        ></note-card>
+            :priorityLocked="priorityLocked && !card.isPriority"
+<!--            @update="$emit('update')"-->
+        </note-card>
 
         <button v-if="isDoneColumn" @click="clear" :disabled="!cards.length">
             Clear Done
