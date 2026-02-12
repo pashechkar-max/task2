@@ -149,8 +149,6 @@ Vue.component('board-column', {
             @update="$emit('update')"
             @priority="$emit('priority', $event)"
         ></note-card>
-
-
         <button v-if="isDoneColumn" @click="clear" :disabled="!cards.length">
             Clear Done
         </button>
