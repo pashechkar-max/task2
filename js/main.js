@@ -81,10 +81,12 @@ Vue.component('create-card', {
             const card = {
                 id: Date.now(),
                 title: this.title.trim(),
-                items: this.items.map(i => ({
-                    text: i.text.trim(),
-                    done: false
-                })),
+                items: this.items
+                    .filter(i => i.text.trim())
+                    .map(i => ({
+                        text: i.text.trim(),
+                        done: false
+                    })),
                 finishedAt: null,
                 isPriority: false
             }
@@ -144,8 +146,10 @@ Vue.component('board-column', {
             :card="card"
             :disabled="disabled"
             :priorityLocked="priorityLocked && !card.isPriority"
-<!--            @update="$emit('update')"-->
-        </note-card>
+            @update="$emit('update')"
+            @priority="$emit('priority', $event)"
+        ></note-card>
+
 
         <button v-if="isDoneColumn" @click="clear" :disabled="!cards.length">
             Clear Done
@@ -166,7 +170,8 @@ new Vue({
 
     computed: {
         todoLocked() {
-            return this.columns.progress.length >= 5
+            const hasOverHalf = this.columns.todo.some(card => this.progress(card) > 0.5)
+            return this.columns.progress.length >= 5 && hasOverHalf
         },
         hasActivePriority() {
             const all = [
@@ -179,9 +184,12 @@ new Vue({
 
     methods: {
         setPriority(card) {
+            if (this.hasActivePriority && !card.isPriority) return
+
             [...this.columns.todo, ...this.columns.progress].forEach(c => {
                 c.isPriority = false
             })
+
             card.isPriority = true
             this.save()
         },
@@ -209,9 +217,11 @@ new Vue({
                     return false
                 }
 
-                if (p > 0.5 && this.columns.progress.length < 5) {
-                    this.columns.progress.push(card)
-                    return false
+                if (p > 0.5 && !this.columns.progress.includes(card)) {
+                    if (this.columns.progress.length < 5) {
+                        this.columns.progress.push(card)
+                        return false
+                    }
                 }
 
                 return true
@@ -232,7 +242,9 @@ new Vue({
         },
 
         finish(card) {
-            card.finishedAt = new Date().toLocaleString()
+            if (!card.finishedAt) {
+                card.finishedAt = new Date().toLocaleString()
+            }
             card.isPriority = false
         },
 
@@ -242,7 +254,12 @@ new Vue({
 
         load() {
             const data = localStorage.getItem('notes')
-            if (data) this.columns = JSON.parse(data)
+            if (data) {
+                const parsed = JSON.parse(data)
+                this.columns.todo = parsed.todo || []
+                this.columns.progress = parsed.progress || []
+                this.columns.done = parsed.done || []
+            }
         },
 
         clearDone() {
