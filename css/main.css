@@ -1,14 +1,21 @@
+*{
+    box-sizing: border-box;
+
+}
+
 .columns{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin: 50px 0;
 }
+
 .row-create{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    margin-bottom: 80px;
 }
+
 .create-note{
     display: flex;
     flex-direction: column;
@@ -20,16 +27,40 @@
     align-items: flex-end;
 }
 
+.input{
+    display: flex;
+    padding: 8px 24px 8px 6px;
+    margin-bottom: 3px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
 .item{
     display: block;
-    padding: 5px 5px;
+    padding: 8px 8px;
     margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: #8f8fff;
+    background-color: #f1f1f1;
+}
+
+.item:hover{
+    background-color: #f8f8f8;
 }
 
 .create{
     display: block;
     width: 100%;
     height: 30px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: #f1f1f1;
+    background-color: #8f8fff;
+    font-weight: bold;
+}
+.create:hover{
+    background-color: #7e7efd;
 }
 
 .clear{

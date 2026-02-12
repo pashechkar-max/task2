@@ -107,10 +107,10 @@ Vue.component('create-card', {
 
     template: `
       <div class="create-card">
-        <input v-model="title" placeholder="title">
+        <input class="input" v-model="title" placeholder="title">
 
         <div v-for="(item, i) in items" :key="i">
-          <input v-model="item.text" placeholder="item">
+          <input class="input" v-model="item.text" placeholder="item">
         </div>
 
         <button class="item" @click="addItem" :disabled="items.length >= 5">
